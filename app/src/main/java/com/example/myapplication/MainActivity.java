@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     public class myWebViewClient extends WebViewClient{
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            progressBar.setVisibility(View.VISIBLE);
             view.loadUrl(url);
             return true;
         }
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
         connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED){
+            progressBar.setVisibility(View.VISIBLE);
             webView.setVisibility(View.VISIBLE);
         }else {
             webView.setVisibility(View.GONE);
