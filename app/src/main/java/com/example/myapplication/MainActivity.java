@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new myWebViewClient());
-        webView.loadUrl("https://github.com/AriSmrd7/AplikasiSistemPakar");
+        webView.loadUrl("https://konsultasi.arisumardi.my.id/");
     }
 
     public class myWebViewClient extends WebViewClient{
