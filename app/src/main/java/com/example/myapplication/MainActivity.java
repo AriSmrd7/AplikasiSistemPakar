@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new myWebViewClient());
-        webView.loadUrl("https://www.google.com/");
+        webView.loadUrl("https://konsultasi.arisumardi.my.id/");
         if(WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
             WebSettingsCompat.setForceDark(webView.getSettings(), WebSettingsCompat.FORCE_DARK_OFF);
         }
