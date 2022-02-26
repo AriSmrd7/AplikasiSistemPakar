@@ -1,14 +1,21 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.webkit.WebSettingsCompat;
+import androidx.webkit.WebViewFeature;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
+import android.webkit.WebBackForwardList;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -22,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressBar;
     WebSettings webSettings;
     Button button;
-    RelativeLayout relativeLayout;
+    RelativeLayout relativeLayout,relativeLayout1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,12 +38,16 @@ public class MainActivity extends AppCompatActivity {
         webView = findViewById(R.id.web_view);
         progressBar = findViewById(R.id.progressBar);
         relativeLayout = findViewById(R.id.nointernet);
+        relativeLayout1 = findViewById(R.id.splash);
         button = findViewById(R.id.reload);
         relativeLayout.setVisibility(View.GONE);
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new myWebViewClient());
-        webView.loadUrl("https://konsultasi.arisumardi.my.id/");
+        webView.loadUrl("https://www.google.com/");
+        if(WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+            WebSettingsCompat.setForceDark(webView.getSettings(), WebSettingsCompat.FORCE_DARK_OFF);
+        }
     }
 
     public class myWebViewClient extends WebViewClient{
@@ -73,17 +84,49 @@ public class MainActivity extends AppCompatActivity {
             isconnected();
             super.onPageFinished(view, url);
             progressBar.setVisibility(View.GONE);
+            splash();
+        }
+    }
+
+
+
+    @Override
+    public void onBackPressed() {
+        if (webView.getUrl().equals("https://konsultasi.arisumardi.my.id/login") || webView.getUrl().equals("https://konsultasi.arisumardi.my.id/") || webView.getUrl().equals("https://konsultasi.arisumardi.my.id/user/home")) {
+            alert();
+        } else{
+            webView.goBack();
         }
     }
 
     public void isconnected(){
         ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED){
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED){
             progressBar.setVisibility(View.VISIBLE);
             webView.setVisibility(View.VISIBLE);
         }else {
             webView.setVisibility(View.GONE);
         }
+    }
+
+    public void alert(){
+        new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle("Confirm")
+                .setMessage("Are you sure you want to exit?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                }).setNegativeButton("No", null).show();
+    }
+
+    public void splash(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                relativeLayout1.setVisibility(View.GONE);
+            }
+        }, 1000L);
     }
 }
